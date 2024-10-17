@@ -1,0 +1,13 @@
+; ; 
+aa; aaa; aaa
+aa; aaa; aaa
+aa; aaa; aaa
+aa; aaa; aaa
+aa; aaa; aaa
+; ; AC
+aa; aa; AC
+aa; aa; AC
+aa; aa; AC
+; ; AC
+; ; AL
+; ; GO
