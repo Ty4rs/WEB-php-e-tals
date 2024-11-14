@@ -1,24 +1,33 @@
+<?php
+	require 'conexao.php';
+	if (isset($_GET['btn'])) {
+		$nome 	= $_GET['nome'];
+		$cidade = $_GET['cidade'];
+		$uf 		= $_GET['uf'];
+		$cad = $conexao->prepare("insert into alunos (nome, cidade, uf) value (:n, :c, :u)");
+		$cad->BindValue(':n', $nome);
+		$cad->BindValue(':c', $cidade);
+		$cad->BindValue(':u', $uf);
+		$cad->execute();
+		//echo "<script>return confirm('Certeza?'); return false;</script>";
+		echo "<h2>Aluno(a) $nome cadastrado com sucesso!!!</h2>";
+	}
+?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+	<meta charset="utf-8">
+	<title></title>
 </head>
 <body>
-    <fieldset>
-        <form action="" method="GET">
-        <p>
-				Nome do aluno: <br> <input type="text" name="nome">
-			</p>
-            <p>
-				Cidade: <br> <input type="text" name="cidade">
-			</p>
-            <p>
-				Estado: <br> 
+	<h1>Cadastro de Alunos</h1>
+	<fieldset>
+		<form action="" method="GET">
+			<p>Nome: <br> <input type="text" name="nome"></p>
+			<p>Cidade: <br> <input type="text" name="cidade"></p>
+			<p>Estado: <br>
 				<select id="uf" name="uf">
-                <option value=""></option>
-                
 			    <option value="AC">Acre</option>
 			    <option value="AL">Alagoas</option>
 			    <option value="AP">Amapá</option>
@@ -48,24 +57,36 @@
 			    <option value="TO">Tocantins</option>
 			    <option value="EX">Estrangeiro</option>
 				</select>
-			<p>
-				<input type="submit" name="btn" value="Cadastrar">
 			</p>
-        </form>
-    </fieldset>
+			<p><input type="submit" name="btn" value="Cadastrar"></p>
+		</form>
+	</fieldset>
 </body>
 </html>
 
+
 <?php
-    require 'conexao.php';
-    if(isset($_GET['btn'])){
-        $nome = $_GET['nome'];
-        $cidade = $_GET['cidade'];
-        $uf = $_GET['uf'];
-        $cad = $conexao->prepare("insert into alunos (nome, cidade, uf) values ('$nome', '$cidade', '$uf')");
-        $cad->execute();
-        echo "<h2>Aluno  $nome cadastrado com sucesso!</h2>";
-    }
-
-
+	$dados = $conexao->prepare("select * from alunos");
+	$dados->execute();
+	echo 
+		"<table border=1 cellspacing=0>
+			<tr style='background:lightblue'>
+				<th>COD</th>
+				<th>NOME</th>
+				<th>CIDADE</th>
+				<th>UF</th>
+				<th>AÇÕES</th>
+			</tr>";
+	$listar = $dados->fetchAll(PDO::FETCH_OBJ);
+	foreach ($listar as $aluno) {
+		echo 
+			"<tr>
+				<td>$aluno->id</td>
+				<td>$aluno->nome</td>
+				<td>$aluno->cidade</td>
+				<td>$aluno->UF</td>
+				<td style='font-size:10px'>[ALTERAR] [EXCLUIR]</td>
+			</tr> ";
+	}
+	echo "</table";
 ?>
